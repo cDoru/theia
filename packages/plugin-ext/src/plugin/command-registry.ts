@@ -134,6 +134,15 @@ export class CommandRegistryImpl implements CommandRegistryExt {
         }
         return commands.executeCommand(actualCmd.command ? actualCmd.command : actualCmd.id, ...(actualCmd.arguments || []));
     }
+
+    getCommands(filterUnderscoreCommands: boolean = false): Thenable<string[]> {
+        return this.proxy.$getCommands().then(result => {
+            if (filterUnderscoreCommands) {
+                result = result.filter(command => command[0] !== '_');
+            }
+            return result;
+        });
+    }
 }
 
 /** Converter between internal and api commands. */
